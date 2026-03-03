@@ -12,4 +12,5 @@ app.use('/api/products', require('./routes/products'));
 app.use('/api/orders', require('./routes/orders'));
 app.use('/api/chatbot', require('./routes/chatbot'));
 
-app.listen(process.env.PORT, () => console.log(`✅ Servidor corriendo en puerto ${process.env.PORT}`));
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, '0.0.0.0', () => console.log(`✅ Servidor corriendo en puerto ${PORT}`));
