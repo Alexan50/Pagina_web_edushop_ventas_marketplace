@@ -35,9 +35,7 @@ export default function Login() {
         <p style={{textAlign:'center', marginTop:'1rem'}}>
           ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
         </p>
-        <p style={{textAlign:'center', color:'#999', fontSize:'0.85rem'}}>
-          Admin: admin@edushop.com / admin123
-        </p>
+      
       </div>
     </div>
   );
