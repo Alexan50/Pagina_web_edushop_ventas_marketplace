@@ -1,0 +1,9 @@
+[build]
+builder = "nixpacks"
+
+[build.nixpacks]
+noDefaultEnv = true
+
+[deploy]
+startCommand = "node server.js"
+restartPolicyType = "on_failure"
