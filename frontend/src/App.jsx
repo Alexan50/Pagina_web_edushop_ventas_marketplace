@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
@@ -25,9 +25,12 @@ function AdminRoute({ children }) {
 
 function AppLayout() {
   const { theme } = useTheme();
+  const { pathname } = useLocation();
+  const isAdmin = pathname.startsWith('/admin');
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: theme.bg }}>
-      <Navbar />
+      {!isAdmin && <Navbar />}
       <main style={{ flex: 1 }}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -46,8 +49,8 @@ function AppLayout() {
           </Route>
         </Routes>
       </main>
-      <Footer />
-      <Chatbot />
+      {!isAdmin && <Footer />}
+      {!isAdmin && <Chatbot />}
     </div>
   );
 }
