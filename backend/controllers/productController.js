@@ -13,16 +13,23 @@ exports.getOne = async (req, res) => {
 
 exports.create = async (req, res) => {
   const { name, description, price, category, stock } = req.body;
-  const image = req.file ? req.file.filename : '';
-  await db.execute('INSERT INTO products (name, description, price, category, image, stock) VALUES (?,?,?,?,?,?)',
-    [name, description, price, category, image, stock]);
+  // Si subió archivo usa el nombre del archivo, si no usa la URL directamente
+  const image = req.file ? req.file.filename : (req.body.image || '');
+  await db.execute(
+    'INSERT INTO products (name, description, price, category, image, stock) VALUES (?,?,?,?,?,?)',
+    [name, description, price, category, image, stock]
+  );
   res.json({ message: 'Producto creado' });
 };
 
 exports.update = async (req, res) => {
   const { name, description, price, category, stock } = req.body;
-  await db.execute('UPDATE products SET name=?, description=?, price=?, category=?, stock=? WHERE id=?',
-    [name, description, price, category, stock, req.params.id]);
+  // Si subió archivo usa el nombre del archivo, si no usa la URL directamente
+  const image = req.file ? req.file.filename : (req.body.image || '');
+  await db.execute(
+    'UPDATE products SET name=?, description=?, price=?, category=?, image=?, stock=? WHERE id=?',
+    [name, description, price, category, image, stock, req.params.id]
+  );
   res.json({ message: 'Producto actualizado' });
 };
 

@@ -9,7 +9,10 @@ export default function ProductCard({ product }) {
     <div style={{ ...styles.card, background: theme.card, border: `1px solid ${theme.cardBorder}` }}>
       <div style={styles.imgWrap}>
         <img
-          src={`https://paginawebedushopventasmarketplace-production-8b90.up.railway.app/uploads/${product.image}`}
+          src={product.image?.startsWith('http') 
+  ? product.image 
+  : `https://paginawebedushopventasmarketplace-production-8b90.up.railway.app/uploads/${product.image}`
+}
           alt={product.name}
           style={styles.img}
           onError={e => e.target.src = `https://placehold.co/400x200/4f46e5/white?text=${encodeURIComponent(product.name.substring(0,15))}`}
