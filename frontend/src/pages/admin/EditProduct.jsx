@@ -10,18 +10,16 @@ export default function EditProduct() {
   const isNew = !id;
   const [form, setForm] = useState({ name: '', description: '', price: '', category: 'curso', stock: '', image: '' });
   const [msg, setMsg] = useState('');
-  const [imgMode, setImgMode] = useState('url');
   const [preview, setPreview] = useState('');
-  const [file, setFile] = useState(null);
 
   useEffect(() => {
     if (!isNew) {
       api.get(`/products/${id}`).then(({ data }) => {
         setForm(data);
         if (data.image) {
-          const isUrl = data.image.startsWith('http');
-          setImgMode(isUrl ? 'url' : 'file');
-          setPreview(isUrl ? data.image : `${API_URL}/uploads/${data.image}`);
+          setPreview(data.image.startsWith('http')
+            ? data.image
+            : `${API_URL}/uploads/${data.image}`);
         }
       });
     }
@@ -33,31 +31,11 @@ export default function EditProduct() {
     setPreview(url);
   };
 
-  const handleFileChange = (e) => {
-    const f = e.target.files[0];
-    if (!f) return;
-    setFile(f);
-    setPreview(URL.createObjectURL(f));
-    setForm({ ...form, image: f.name });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      if (imgMode === 'file' && file) {
-        const formData = new FormData();
-        formData.append('name', form.name);
-        formData.append('description', form.description);
-        formData.append('price', form.price);
-        formData.append('category', form.category);
-        formData.append('stock', form.stock);
-        formData.append('image', file);
-        if (isNew) await api.post('/products', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-        else await api.put(`/products/${id}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-      } else {
-        if (isNew) await api.post('/products', form);
-        else await api.put(`/products/${id}`, form);
-      }
+      if (isNew) await api.post('/products', form);
+      else await api.put(`/products/${id}`, form);
       setMsg('✅ Guardado correctamente');
       setTimeout(() => navigate('/admin/products'), 1500);
     } catch {
@@ -101,56 +79,24 @@ export default function EditProduct() {
             <option value="libro">📖 Libro</option>
           </select>
 
-          {/* ── IMAGEN ── */}
-          <label style={styles.label}>Imagen del Producto</label>
-          <div style={styles.tabRow}>
-            <button type="button"
-              onClick={() => { setImgMode('url'); setPreview(''); setFile(null); }}
-              style={{ ...styles.tab, ...(imgMode === 'url' ? styles.tabActive : {}) }}>
-              🌐 URL de internet
-            </button>
-            <button type="button"
-              onClick={() => { setImgMode('file'); setPreview(''); }}
-              style={{ ...styles.tab, ...(imgMode === 'file' ? styles.tabActive : {}) }}>
-              📁 Desde mi PC
-            </button>
+          <label style={styles.label}>🖼️ Imagen del Producto</label>
+          <input
+            style={styles.input}
+            placeholder="Pega aquí la URL de la imagen — https://..."
+            value={form.image?.startsWith('http') ? form.image : ''}
+            onChange={handleUrlChange}
+          />
+          <div style={styles.hintBox}>
+            <p style={styles.hintTitle}>¿Cómo obtener una URL de imagen?</p>
+            <p style={styles.hintText}>📌 <strong>Google Imágenes:</strong> busca la imagen → clic derecho → <em>Copiar dirección de imagen</em> → pega aquí</p>
+            <p style={styles.hintText}>📌 <strong>Desde tu PC:</strong> sube la imagen a <strong>imgur.com</strong> gratis → copia el enlace → pega aquí</p>
           </div>
-
-          {imgMode === 'url' ? (
-            <>
-              <input
-                style={styles.input}
-                placeholder="Pega aquí la URL de la imagen — https://..."
-                value={form.image?.startsWith('http') ? form.image : ''}
-                onChange={handleUrlChange}
-              />
-              <p style={styles.hint}>
-                💡 En Google Imágenes: clic derecho sobre la imagen → <strong>Copiar dirección de imagen</strong> → pegar aquí
-              </p>
-            </>
-          ) : (
-            <>
-              <input
-                style={styles.input}
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-              <p style={styles.hint}>
-                💡 Selecciona una imagen JPG o PNG desde tu carpeta de Descargas o cualquier carpeta de tu PC
-              </p>
-            </>
-          )}
 
           {preview && (
             <div style={styles.previewBox}>
-              <p style={styles.previewLabel}>Vista previa de la imagen:</p>
-              <img
-                src={preview}
-                alt="preview"
-                style={styles.previewImg}
-                onError={e => { e.target.style.display = 'none'; }}
-              />
+              <p style={styles.previewLabel}>Vista previa:</p>
+              <img src={preview} alt="preview" style={styles.previewImg}
+                onError={e => { e.target.style.display = 'none'; }} />
             </div>
           )}
 
@@ -173,10 +119,9 @@ const styles = {
   label: { display: 'block', fontWeight: '600', color: '#374151', marginBottom: '0.4rem', fontSize: '0.9rem' },
   input: { width: '100%', padding: '0.8rem 1rem', border: '1.5px solid #e2e8f0', borderRadius: '10px', fontSize: '1rem', marginBottom: '1.2rem', boxSizing: 'border-box', color: '#1a1a2e', background: '#f8fafc', outline: 'none' },
   row: { display: 'flex', gap: '1rem' },
-  tabRow: { display: 'flex', gap: '0.5rem', marginBottom: '0.8rem' },
-  tab: { flex: 1, padding: '0.65rem', border: '1.5px solid #e2e8f0', borderRadius: '8px', background: '#f8fafc', color: '#64748b', cursor: 'pointer', fontWeight: '600', fontSize: '0.88rem' },
-  tabActive: { background: '#eef2ff', borderColor: '#4f46e5', color: '#4f46e5' },
-  hint: { fontSize: '0.8rem', color: '#64748b', marginTop: '-0.8rem', marginBottom: '1rem', fontStyle: 'italic' },
+  hintBox: { background: '#fffbeb', border: '1.5px solid #fde68a', borderRadius: '10px', padding: '1rem', marginBottom: '1.2rem', marginTop: '-0.8rem' },
+  hintTitle: { fontWeight: '700', color: '#92400e', fontSize: '0.85rem', marginBottom: '0.5rem' },
+  hintText: { fontSize: '0.82rem', color: '#78350f', marginBottom: '0.3rem' },
   previewBox: { marginBottom: '1.2rem', padding: '1rem', background: '#f8fafc', borderRadius: '10px', border: '1.5px solid #e2e8f0' },
   previewLabel: { fontSize: '0.82rem', color: '#64748b', marginBottom: '0.5rem', fontWeight: '600' },
   previewImg: { width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '8px' },
