@@ -86,12 +86,7 @@ export default function EditProduct() {
             value={form.image?.startsWith('http') ? form.image : ''}
             onChange={handleUrlChange}
           />
-          <div style={styles.hintBox}>
-            <p style={styles.hintTitle}>¿Cómo obtener una URL de imagen?</p>
-            <p style={styles.hintText}>📌 <strong>Google Imágenes:</strong> busca la imagen → clic derecho → <em>Copiar dirección de imagen</em> → pega aquí</p>
-            <p style={styles.hintText}>📌 <strong>Desde tu PC:</strong> sube la imagen a <strong>imgur.com</strong> gratis → copia el enlace → pega aquí</p>
-          </div>
-
+          
           {preview && (
             <div style={styles.previewBox}>
               <p style={styles.previewLabel}>Vista previa:</p>
@@ -119,9 +114,6 @@ const styles = {
   label: { display: 'block', fontWeight: '600', color: '#374151', marginBottom: '0.4rem', fontSize: '0.9rem' },
   input: { width: '100%', padding: '0.8rem 1rem', border: '1.5px solid #e2e8f0', borderRadius: '10px', fontSize: '1rem', marginBottom: '1.2rem', boxSizing: 'border-box', color: '#1a1a2e', background: '#f8fafc', outline: 'none' },
   row: { display: 'flex', gap: '1rem' },
-  hintBox: { background: '#fffbeb', border: '1.5px solid #fde68a', borderRadius: '10px', padding: '1rem', marginBottom: '1.2rem', marginTop: '-0.8rem' },
-  hintTitle: { fontWeight: '700', color: '#92400e', fontSize: '0.85rem', marginBottom: '0.5rem' },
-  hintText: { fontSize: '0.82rem', color: '#78350f', marginBottom: '0.3rem' },
   previewBox: { marginBottom: '1.2rem', padding: '1rem', background: '#f8fafc', borderRadius: '10px', border: '1.5px solid #e2e8f0' },
   previewLabel: { fontSize: '0.82rem', color: '#64748b', marginBottom: '0.5rem', fontWeight: '600' },
   previewImg: { width: '100%', maxHeight: '200px', objectFit: 'cover', borderRadius: '8px' },
