@@ -9,6 +9,7 @@ const menuItems = [
   { to: '/admin/ventas', label: 'Ventas', icon: '💰' },
   { to: '/admin/analytics', label: 'Analíticas', icon: '📈' },
   { to: '/admin/new', label: 'Nuevo Producto', icon: '➕' },
+  { to: '/admin/nuevo-admin', label: 'Nuevo Admin', icon: '👑' },
 ];
 
 export default function AdminLayout() {

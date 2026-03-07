@@ -17,6 +17,7 @@ import StockPage from './pages/admin/StockPage';
 import VentasPage from './pages/admin/VentasPage';
 import AnalyticsPage from './pages/admin/AnalyticsPage';
 import EditProduct from './pages/admin/EditProduct';
+import NuevoAdmin from './pages/admin/NuevoAdmin';
 
 function AdminRoute({ children }) {
   const { user } = useAuth();
@@ -46,6 +47,7 @@ function AppLayout() {
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="edit/:id" element={<EditProduct />} />
             <Route path="new" element={<EditProduct />} />
+            <Route path="nuevo-admin" element={<NuevoAdmin />} />
           </Route>
         </Routes>
       </main>
